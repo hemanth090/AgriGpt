@@ -1,0 +1,34 @@
+# Minimal working set for Python 3.13
+pyyaml==6.0.2
+python-dotenv==1.0.1
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+
+# Pinecone with latest client
+pinecone-client==5.0.1
+
+# LangChain - using older compatible versions
+langchain==0.2.16
+langchain-core==0.2.39
+langchain-text-splitters==0.2.4
+langchain-google-genai==1.0.10
+langchain-pinecone==0.1.3
+
+# Google AI
+google-generativeai==0.7.2
+
+# Utilities
+pypdf==5.1.0
+pymupdf==1.24.0
+Pillow==10.2.0
+
+# CLIP for image embeddings
+transformers>=4.36.0
+torch>=2.0.0
+requests==2.32.3
+python-multipart==0.0.20
+pydantic==2.9.2
+
+# Security
+slowapi==0.1.9
+pyjwt==2.8.0
