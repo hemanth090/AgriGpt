@@ -1,5 +1,6 @@
 """
 AgriGPT Configuration Module
+All configurable values are loaded from environment variables.
 """
 import os
 import sys
@@ -8,7 +9,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # ===========================
-# ENVIRONMENT VALIDATION (Issue 12)
+# ENVIRONMENT VALIDATION
 # ===========================
 
 def validate_env():
@@ -23,31 +24,37 @@ def validate_env():
     
     print("✓ Environment variables validated")
 
-# API Keys
+# ===========================
+# API KEYS
+# ===========================
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
 
-# Pinecone Index Names
+# ===========================
+# PINECONE INDEXES
+# ===========================
 INDEX_CROP_DATA = os.getenv("CROP_INDEX_NAME", "agrigpt-crops")
 INDEX_GOV_SCHEMES = os.getenv("SCHEMES_INDEX_NAME", "agrigpt-schemes")
 
-# CLIP Settings
-CLIP_MODEL = "openai/clip-vit-base-patch32"
-CLIP_EMBEDDING_DIM = 512
+# ===========================
+# AI MODELS (configurable via env)
+# ===========================
+CLIP_MODEL = os.getenv("CLIP_MODEL", "openai/clip-vit-base-patch32")
+CLIP_EMBEDDING_DIM = int(os.getenv("CLIP_EMBEDDING_DIM", "512"))
 
-# Text Chunking
-CHUNK_SIZE = 500
-CHUNK_OVERLAP = 100
+LLM_MODEL = os.getenv("LLM_MODEL", "gemini-2.5-flash")
+LLM_TEMPERATURE = float(os.getenv("LLM_TEMPERATURE", "0.3"))
 
-# LLM Settings
-LLM_MODEL = "gemini-2.5-flash"
-LLM_TEMPERATURE = 0.3
-
-# Vision Model
-VISION_MODEL = "gemini-2.0-flash"
+VISION_MODEL = os.getenv("VISION_MODEL", "gemini-2.0-flash")
 
 # ===========================
-# RATE LIMITS (Issue 9)
+# TEXT CHUNKING
+# ===========================
+CHUNK_SIZE = int(os.getenv("CHUNK_SIZE", "500"))
+CHUNK_OVERLAP = int(os.getenv("CHUNK_OVERLAP", "100"))
+
+# ===========================
+# RATE LIMITS
 # ===========================
 RATE_LIMIT_UPLOAD = os.getenv("RATE_LIMIT_UPLOAD", "5/minute")
 RATE_LIMIT_QUERY = os.getenv("RATE_LIMIT_QUERY", "20/minute")
