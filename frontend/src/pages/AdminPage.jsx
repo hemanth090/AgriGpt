@@ -1,5 +1,35 @@
 import { useState } from 'react'
-import { API_BASE, getHeaders } from '../../utils/api'
+import { API_BASE, getHeaders } from '../utils/api'
+
+function AdminPage() {
+    return (
+        <div className="flex-1 overflow-auto py-12 px-6">
+            <div className="max-w-xl mx-auto">
+                <div className="mb-8">
+                    <h2 className="text-2xl font-semibold text-notion-default mb-1">Admin Panel</h2>
+                    <p className="text-notion-secondary">
+                        Upload PDF documents to build the knowledge base.
+                    </p>
+                </div>
+
+                <div className="space-y-6">
+                    <FileUpload
+                        endpoint="/crops/upload"
+                        icon="🌱"
+                        label="Crop Data"
+                        description="Agriculture and disease information"
+                    />
+                    <FileUpload
+                        endpoint="/schemes/upload"
+                        icon="🏛️"
+                        label="Government Schemes"
+                        description="Farmer support programs"
+                    />
+                </div>
+            </div>
+        </div>
+    )
+}
 
 function FileUpload({ endpoint, icon, label, description }) {
     const [status, setStatus] = useState(null)
@@ -55,7 +85,7 @@ function FileUpload({ endpoint, icon, label, description }) {
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                 />
                 <p className="text-sm text-notion-secondary">
-                    <span className="text-notion-blue font-medium">Click to upload</span>
+                    <span className="text-notion-default font-medium">Click to upload</span>
                     {' '}or drag and drop
                 </p>
                 <p className="text-xs text-notion-tertiary mt-1">PDF files only</p>
@@ -75,4 +105,4 @@ function FileUpload({ endpoint, icon, label, description }) {
     )
 }
 
-export default FileUpload
+export default AdminPage

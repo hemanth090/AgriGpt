@@ -1,8 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
-import { API_BASE, fileToBase64, getHeaders } from '../../utils/api'
-import ChatMessage from '../ChatMessage/ChatMessage'
+import { API_BASE, fileToBase64, getHeaders } from '../utils/api'
 
-function ChatWindow({ activeTab }) {
+function ConsultantPage() {
     const [messages, setMessages] = useState([])
     const [input, setInput] = useState('')
     const [selectedImage, setSelectedImage] = useState(null)
@@ -47,17 +46,15 @@ function ChatWindow({ activeTab }) {
         setInput('')
         setIsLoading(true)
 
-        const endpoint = activeTab === 'consultant' ? '/crops/ask' : '/schemes/query'
-
         try {
             const body = {
                 query: input || 'What can you tell me about this?',
-                ...(activeTab === 'consultant' && selectedImage && { image_base64: selectedImage })
+                ...(selectedImage && { image_base64: selectedImage })
             }
 
             const headers = await getHeaders('application/json')
 
-            const response = await fetch(`${API_BASE}${endpoint}`, {
+            const response = await fetch(`${API_BASE}/crops/ask`, {
                 method: 'POST',
                 headers,
                 body: JSON.stringify(body)
@@ -98,6 +95,35 @@ function ChatWindow({ activeTab }) {
         }
     }
 
+    const Message = ({ message }) => {
+        const { role, content, image, sources, error } = message
+
+        if (role === 'user') {
+            return (
+                <div className="flex justify-end">
+                    <div className="message-user">
+                        {image && (
+                            <img src={image} alt="Uploaded" className="max-w-[180px] rounded-lg mb-2" />
+                        )}
+                        <p className="text-sm text-notion-default whitespace-pre-wrap">{content}</p>
+                    </div>
+                </div>
+            )
+        }
+
+        return (
+            <div className={error ? 'message-error' : 'message-assistant'}>
+                <p className="text-sm text-notion-default whitespace-pre-wrap leading-relaxed">{content}</p>
+                {sources && sources.length > 0 && (
+                    <div className="mt-3 flex items-center gap-2 text-xs text-notion-tertiary">
+                        <span>📎</span>
+                        <span>Sources: {sources.join(', ')}</span>
+                    </div>
+                )}
+            </div>
+        )
+    }
+
     return (
         <>
             {/* Messages Area */}
@@ -105,20 +131,16 @@ function ChatWindow({ activeTab }) {
                 {messages.length === 0 ? (
                     <div className="h-full flex flex-col items-center justify-center text-center">
                         <div className="w-16 h-16 bg-[rgb(227,226,224)] rounded-2xl flex items-center justify-center text-3xl mb-4">
-                            {activeTab === 'consultant' ? '🌾' : '📋'}
+                            🌾
                         </div>
-                        <h3 className="text-lg font-semibold text-notion-default mb-1">
-                            {activeTab === 'consultant' ? 'Crop Consultant' : 'Government Schemes'}
-                        </h3>
+                        <h3 className="text-lg font-semibold text-notion-default mb-1">Crop Consultant</h3>
                         <p className="text-notion-secondary text-sm max-w-sm">
-                            {activeTab === 'consultant'
-                                ? 'Ask questions about crops, diseases, or upload a photo for diagnosis.'
-                                : 'Find government support programs and schemes for farmers.'}
+                            Ask questions about crops, diseases, or upload a photo for diagnosis.
                         </p>
                     </div>
                 ) : (
                     <div className="space-y-4">
-                        {messages.map((msg, i) => <ChatMessage key={i} message={msg} />)}
+                        {messages.map((msg, i) => <Message key={i} message={msg} />)}
                     </div>
                 )}
 
@@ -133,7 +155,6 @@ function ChatWindow({ activeTab }) {
 
             {/* Input Area */}
             <div className="border-t border-[rgba(55,53,47,0.09)] bg-notion-default px-6 py-4">
-                {/* Image preview */}
                 {imagePreview && (
                     <div className="mb-3 flex items-center gap-3 bg-notion-hover rounded-lg p-3">
                         <img src={imagePreview} alt="Preview" className="w-14 h-14 object-cover rounded-lg" />
@@ -141,10 +162,7 @@ function ChatWindow({ activeTab }) {
                             <p className="text-sm text-notion-default">Image attached</p>
                             <p className="text-xs text-notion-tertiary">Ready to analyze</p>
                         </div>
-                        <button
-                            className="btn-notion btn-notion-default"
-                            onClick={removeImage}
-                        >
+                        <button className="btn-notion btn-notion-default" onClick={removeImage}>
                             Remove
                         </button>
                     </div>
@@ -158,32 +176,26 @@ function ChatWindow({ activeTab }) {
                 )}
 
                 <div className="flex items-end gap-2">
-                    {activeTab === 'consultant' && (
-                        <>
-                            <input
-                                type="file"
-                                accept="image/*"
-                                ref={imageInputRef}
-                                onChange={handleImageSelect}
-                                className="hidden"
-                            />
-                            <button
-                                className="btn-notion btn-notion-default h-10"
-                                onClick={() => imageInputRef.current?.click()}
-                                disabled={isProcessingImage}
-                                title="Attach crop photo"
-                            >
-                                📷
-                            </button>
-                        </>
-                    )}
+                    <input
+                        type="file"
+                        accept="image/*"
+                        ref={imageInputRef}
+                        onChange={handleImageSelect}
+                        className="hidden"
+                    />
+                    <button
+                        className="btn-notion btn-notion-default h-10"
+                        onClick={() => imageInputRef.current?.click()}
+                        disabled={isProcessingImage}
+                        title="Attach crop photo"
+                    >
+                        📷
+                    </button>
 
-                    <div className="flex-1 relative">
+                    <div className="flex-1">
                         <textarea
-                            className="input-notion resize-none py-2.5 pr-4"
-                            placeholder={activeTab === 'consultant'
-                                ? 'Ask about crops, diseases, treatments...'
-                                : 'Ask about government schemes for farmers...'}
+                            className="input-notion resize-none py-2.5"
+                            placeholder="Ask about crops, diseases, treatments..."
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                             onKeyPress={handleKeyPress}
@@ -205,4 +217,4 @@ function ChatWindow({ activeTab }) {
     )
 }
 
-export default ChatWindow
+export default ConsultantPage

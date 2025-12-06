@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { useAuth } from '../../context/AuthContext'
+import { useAuth } from '../context/AuthContext'
 
-function Auth() {
+function LoginPage() {
     const [isLogin, setIsLogin] = useState(true)
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -109,7 +109,7 @@ function Auth() {
                 <p className="text-center mt-6 text-sm text-notion-secondary">
                     {isLogin ? "Don't have an account?" : 'Already have an account?'}
                     <button
-                        className="ml-1 text-notion-blue hover:underline font-medium"
+                        className="ml-1 text-notion-default hover:underline font-medium"
                         onClick={() => setIsLogin(!isLogin)}
                     >
                         {isLogin ? 'Sign up' : 'Log in'}
@@ -120,4 +120,4 @@ function Auth() {
     )
 }
 
-export default Auth
+export default LoginPage

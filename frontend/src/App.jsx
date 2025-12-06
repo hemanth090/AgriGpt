@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { useAuth } from './context/AuthContext'
-import FileUpload from './components/FileUpload/FileUpload'
-import ChatWindow from './components/ChatWindow/ChatWindow'
-import Auth from './components/Auth/Auth'
+import LoginPage from './pages/LoginPage'
+import ConsultantPage from './pages/ConsultantPage'
+import SchemesPage from './pages/SchemesPage'
+import AdminPage from './pages/AdminPage'
 
 function App() {
   const [activeTab, setActiveTab] = useState('consultant')
@@ -18,12 +19,12 @@ function App() {
   }
 
   if (!user) {
-    return <Auth />
+    return <LoginPage />
   }
 
   return (
     <div className="min-h-screen flex flex-col bg-notion-default">
-      {/* Header - Notion style with subtle shadow */}
+      {/* Header */}
       <header className="bg-notion-default border-b border-[rgba(55,53,47,0.09)] px-6 py-3 sticky top-0 z-50">
         <div className="flex items-center justify-between max-w-6xl mx-auto">
           {/* Logo */}
@@ -65,34 +66,8 @@ function App() {
       {/* Main Content */}
       <main className="flex-1 flex flex-col overflow-hidden">
         {showAdmin && isAdmin ? (
-          /* Admin Panel */
-          <div className="flex-1 overflow-auto py-12 px-6">
-            <div className="max-w-xl mx-auto">
-              <div className="mb-8">
-                <h2 className="text-2xl font-semibold text-notion-default mb-1">Admin Panel</h2>
-                <p className="text-notion-secondary">
-                  Upload PDF documents to build the knowledge base.
-                </p>
-              </div>
-
-              <div className="space-y-6">
-                <FileUpload
-                  endpoint="/crops/upload"
-                  icon="🌱"
-                  label="Crop Data"
-                  description="Agriculture and disease information"
-                />
-                <FileUpload
-                  endpoint="/schemes/upload"
-                  icon="🏛️"
-                  label="Government Schemes"
-                  description="Farmer support programs"
-                />
-              </div>
-            </div>
-          </div>
+          <AdminPage />
         ) : (
-          /* Chat Interface */
           <div className="flex-1 flex flex-col overflow-hidden max-w-4xl mx-auto w-full">
             {/* Tabs */}
             <div className="px-6 pt-4 border-b border-[rgba(55,53,47,0.09)]">
@@ -112,7 +87,7 @@ function App() {
               </nav>
             </div>
 
-            <ChatWindow activeTab={activeTab} />
+            {activeTab === 'consultant' ? <ConsultantPage /> : <SchemesPage />}
           </div>
         )}
       </main>
