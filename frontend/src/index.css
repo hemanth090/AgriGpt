@@ -1,19 +1,271 @@
 @import "tailwindcss";
 
-@theme {
-  /* Notion-inspired colors */
-  --color-cream-50: #faf9f6;
-  --color-cream-100: #f5f3ef;
-  --color-cream-200: #e8e6e1;
+/* ============================================
+   NOTION-INSPIRED DESIGN SYSTEM
+   Premium, hand-crafted typography & spacing
+   ============================================ */
 
-  --color-notion-text: #37352f;
-  --color-notion-gray: #787774;
-  --color-notion-border: #e8e7e4;
+/* Typography - Notion uses system fonts with specific weights */
+@layer base {
+    html {
+        font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+    }
 
-  /* Font family */
-  --font-family-sans: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    body {
+        background-color: rgb(255, 255, 255);
+        color: rgb(55, 53, 47);
+        line-height: 1.5;
+        font-size: 16px;
+    }
+
+    /* Notion-style headings */
+    h1,
+    h2,
+    h3,
+    h4 {
+        font-weight: 600;
+        letter-spacing: -0.01em;
+        line-height: 1.2;
+    }
 }
 
-body {
-  @apply bg-cream-50 text-notion-text font-sans;
+/* Component layer for reusable patterns */
+@layer components {
+
+    /* Notion-style buttons */
+    .btn-notion {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        font-size: 14px;
+        font-weight: 500;
+        border-radius: 6px;
+        transition: background-color 120ms ease-in-out, box-shadow 120ms ease-in-out;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .btn-notion-default {
+        background-color: rgba(55, 53, 47, 0.04);
+        color: rgb(55, 53, 47);
+        border: none;
+    }
+
+    .btn-notion-default:hover {
+        background-color: rgba(55, 53, 47, 0.08);
+    }
+
+    .btn-notion-default:active {
+        background-color: rgba(55, 53, 47, 0.16);
+    }
+
+    .btn-notion-primary {
+        background-color: rgb(35, 131, 226);
+        color: white;
+        border: none;
+    }
+
+    .btn-notion-primary:hover {
+        background-color: rgb(0, 117, 211);
+    }
+
+    .btn-notion-danger {
+        background-color: rgb(235, 87, 87);
+        color: white;
+    }
+
+    /* Notion-style cards */
+    .card-notion {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: rgba(15, 15, 15, 0.05) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 3px 6px, rgba(15, 15, 15, 0.2) 0px 9px 24px;
+    }
+
+    /* Notion-style inputs */
+    .input-notion {
+        width: 100%;
+        padding: 8px 10px;
+        font-size: 14px;
+        line-height: 20px;
+        background-color: rgba(242, 241, 238, 0.6);
+        border: 1px solid rgba(55, 53, 47, 0.16);
+        border-radius: 4px;
+        transition: border-color 200ms ease, box-shadow 200ms ease;
+    }
+
+    .input-notion:focus {
+        outline: none;
+        border-color: rgb(35, 131, 226);
+        box-shadow: rgb(35, 131, 226) 0px 0px 0px 1px;
+        background-color: white;
+    }
+
+    .input-notion::placeholder {
+        color: rgba(55, 53, 47, 0.4);
+    }
+
+    /* Notion-style tabs */
+    .tab-notion {
+        padding: 8px 12px;
+        font-size: 14px;
+        font-weight: 500;
+        color: rgba(55, 53, 47, 0.65);
+        border-bottom: 2px solid transparent;
+        transition: all 150ms ease;
+        cursor: pointer;
+    }
+
+    .tab-notion:hover {
+        color: rgb(55, 53, 47);
+    }
+
+    .tab-notion.active {
+        color: rgb(55, 53, 47);
+        border-bottom-color: rgb(55, 53, 47);
+    }
+
+    /* Notion-style divider */
+    .divider-notion {
+        height: 1px;
+        background-color: rgba(55, 53, 47, 0.09);
+    }
+
+    /* Notion-style text colors */
+    .text-notion-default {
+        color: rgb(55, 53, 47);
+    }
+
+    .text-notion-secondary {
+        color: rgba(55, 53, 47, 0.65);
+    }
+
+    .text-notion-tertiary {
+        color: rgba(55, 53, 47, 0.4);
+    }
+
+    .text-notion-blue {
+        color: rgb(35, 131, 226);
+    }
+
+    .text-notion-green {
+        color: rgb(15, 123, 108);
+    }
+
+    .text-notion-red {
+        color: rgb(235, 87, 87);
+    }
+
+    /* Notion-style backgrounds */
+    .bg-notion-default {
+        background-color: white;
+    }
+
+    .bg-notion-gray {
+        background-color: rgb(251, 251, 250);
+    }
+
+    .bg-notion-hover {
+        background-color: rgba(55, 53, 47, 0.04);
+    }
+
+    .bg-notion-active {
+        background-color: rgba(55, 53, 47, 0.08);
+    }
+
+    /* Chat message bubbles */
+    .message-user {
+        background-color: rgb(227, 226, 224);
+        border-radius: 18px 18px 4px 18px;
+        padding: 10px 16px;
+        max-width: 85%;
+        margin-left: auto;
+    }
+
+    .message-assistant {
+        background-color: transparent;
+        border-left: 2px solid rgba(55, 53, 47, 0.16);
+        padding: 8px 16px;
+        margin-left: 0;
+    }
+
+    .message-error {
+        background-color: rgba(235, 87, 87, 0.08);
+        border-left: 2px solid rgb(235, 87, 87);
+        padding: 8px 16px;
+    }
+
+    /* File upload dropzone */
+    .dropzone-notion {
+        border: 1px dashed rgba(55, 53, 47, 0.25);
+        border-radius: 8px;
+        padding: 32px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 200ms ease;
+    }
+
+    .dropzone-notion:hover {
+        border-color: rgb(35, 131, 226);
+        background-color: rgba(35, 131, 226, 0.04);
+    }
+
+    /* Spinner */
+    .spinner-notion {
+        width: 20px;
+        height: 20px;
+        border: 2px solid rgba(55, 53, 47, 0.16);
+        border-top-color: rgb(55, 53, 47);
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    /* Status badges */
+    .badge-success {
+        background-color: rgba(15, 123, 108, 0.1);
+        color: rgb(15, 123, 108);
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 500;
+    }
+
+    .badge-error {
+        background-color: rgba(235, 87, 87, 0.1);
+        color: rgb(235, 87, 87);
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 500;
+    }
+}
+
+/* Scrollbar styling (Notion-like) */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(55, 53, 47, 0.16);
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(55, 53, 47, 0.3);
 }

@@ -25,7 +25,7 @@ function FileUpload({ endpoint, icon, label, description }) {
             const data = await response.json()
 
             if (response.ok) {
-                setStatus({ type: 'success', message: `✓ ${data.text_chunks} chunks uploaded` })
+                setStatus({ type: 'success', message: `${data.text_chunks} chunks processed` })
             } else {
                 setStatus({ type: 'error', message: data.detail || 'Upload failed' })
             }
@@ -38,34 +38,37 @@ function FileUpload({ endpoint, icon, label, description }) {
     }
 
     return (
-        <div className="mb-6">
-            <label className="block text-sm font-medium text-notion-text mb-2">{label}</label>
-            <div className="relative border-2 border-dashed border-notion-border rounded-xl p-8 hover:border-green-500 transition cursor-pointer bg-cream-50">
+        <div>
+            <div className="flex items-center gap-3 mb-2">
+                <span className="text-xl">{icon}</span>
+                <div>
+                    <p className="text-sm font-medium text-notion-default">{label}</p>
+                    <p className="text-xs text-notion-tertiary">{description}</p>
+                </div>
+            </div>
+
+            <div className="dropzone-notion relative">
                 <input
                     type="file"
                     accept=".pdf"
                     onChange={handleUpload}
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                 />
-                <div className="text-center pointer-events-none">
-                    <div className="text-5xl mb-3">{icon}</div>
-                    <p className="text-notion-text">
-                        <strong>Click to upload</strong> or drag and drop<br />
-                        <small className="text-notion-gray">{description}</small>
-                    </p>
-                </div>
+                <p className="text-sm text-notion-secondary">
+                    <span className="text-notion-blue font-medium">Click to upload</span>
+                    {' '}or drag and drop
+                </p>
+                <p className="text-xs text-notion-tertiary mt-1">PDF files only</p>
             </div>
+
             {status && (
-                <div className={`mt-3 px-4 py-3 rounded-lg text-sm flex items-center gap-2 ${status.type === 'loading'
-                        ? 'bg-blue-50 text-blue-700'
-                        : status.type === 'success'
-                            ? 'bg-green-50 text-green-700'
-                            : 'bg-red-50 text-red-700'
+                <div className={`mt-3 flex items-center gap-2 text-sm ${status.type === 'loading' ? 'text-notion-secondary' :
+                        status.type === 'success' ? 'text-notion-green' : 'text-notion-red'
                     }`}>
-                    {status.type === 'loading' && (
-                        <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-                    )}
-                    {status.message}
+                    {status.type === 'loading' && <div className="spinner-notion"></div>}
+                    {status.type === 'success' && <span>✓</span>}
+                    {status.type === 'error' && <span>✕</span>}
+                    <span>{status.message}</span>
                 </div>
             )}
         </div>

@@ -34,75 +34,87 @@ function Auth() {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-cream-50 px-4">
-            <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
+        <div className="min-h-screen flex items-center justify-center bg-notion-gray px-4">
+            <div className="w-full max-w-sm">
+                {/* Logo */}
                 <div className="text-center mb-8">
-                    <span className="text-5xl block mb-3">🌾</span>
-                    <h1 className="text-3xl font-bold text-notion-text mb-2">AgriGPT</h1>
-                    <p className="text-notion-gray text-sm">
-                        {isLogin ? 'Sign in to continue' : 'Create your account'}
+                    <div className="inline-flex items-center justify-center w-16 h-16 bg-[rgb(227,226,224)] rounded-2xl mb-4 text-4xl">
+                        🌾
+                    </div>
+                    <h1 className="text-2xl font-semibold text-notion-default">AgriGPT</h1>
+                    <p className="text-notion-secondary text-sm mt-1">
+                        {isLogin ? 'Welcome back' : 'Create your account'}
                     </p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-5">
-                    <div>
-                        <label className="block text-sm font-medium text-notion-text mb-2">
-                            Email
-                        </label>
-                        <input
-                            type="email"
-                            className="w-full px-4 py-3 rounded-lg border border-notion-border focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
-                            placeholder="you@example.com"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium text-notion-text mb-2">
-                            Password
-                        </label>
-                        <input
-                            type="password"
-                            className="w-full px-4 py-3 rounded-lg border border-notion-border focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
-                            placeholder="••••••••"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                            minLength={6}
-                        />
-                    </div>
-
-                    {error && (
-                        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
-                            {error}
+                {/* Card */}
+                <div className="card-notion p-8">
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                        <div>
+                            <label className="block text-sm font-medium text-notion-default mb-1.5">
+                                Email
+                            </label>
+                            <input
+                                type="email"
+                                className="input-notion"
+                                placeholder="Enter your email..."
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                            />
                         </div>
-                    )}
 
-                    {message && (
-                        <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg text-sm">
-                            {message}
+                        <div>
+                            <label className="block text-sm font-medium text-notion-default mb-1.5">
+                                Password
+                            </label>
+                            <input
+                                type="password"
+                                className="input-notion"
+                                placeholder="Enter your password..."
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                                minLength={6}
+                            />
                         </div>
-                    )}
 
-                    <button
-                        type="submit"
-                        className="w-full bg-gradient-to-r from-green-500 to-green-600 text-white font-semibold py-3 px-4 rounded-lg hover:from-green-600 hover:to-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition shadow-md"
-                        disabled={loading}
-                    >
-                        {loading ? 'Loading...' : (isLogin ? 'Sign In' : 'Sign Up')}
-                    </button>
-                </form>
+                        {error && (
+                            <div className="badge-error text-sm py-2 px-3 rounded-md">
+                                {error}
+                            </div>
+                        )}
 
-                <div className="mt-6 text-center">
+                        {message && (
+                            <div className="badge-success text-sm py-2 px-3 rounded-md">
+                                {message}
+                            </div>
+                        )}
+
+                        <button
+                            type="submit"
+                            className="w-full btn-notion btn-notion-primary py-2.5 justify-center mt-2"
+                            disabled={loading}
+                        >
+                            {loading ? (
+                                <span className="spinner-notion border-white border-t-transparent"></span>
+                            ) : (
+                                isLogin ? 'Continue with email' : 'Create account'
+                            )}
+                        </button>
+                    </form>
+                </div>
+
+                {/* Toggle */}
+                <p className="text-center mt-6 text-sm text-notion-secondary">
+                    {isLogin ? "Don't have an account?" : 'Already have an account?'}
                     <button
-                        className="text-sm text-notion-gray hover:text-notion-text transition"
+                        className="ml-1 text-notion-blue hover:underline font-medium"
                         onClick={() => setIsLogin(!isLogin)}
                     >
-                        {isLogin ? "Don't have an account? Sign up" : 'Already have an account? Sign in'}
+                        {isLogin ? 'Sign up' : 'Log in'}
                     </button>
-                </div>
+                </p>
             </div>
         </div>
     )

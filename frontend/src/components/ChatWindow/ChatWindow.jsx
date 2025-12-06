@@ -51,7 +51,7 @@ function ChatWindow({ activeTab }) {
 
         try {
             const body = {
-                query: input || 'What information can you provide about this?',
+                query: input || 'What can you tell me about this?',
                 ...(activeTab === 'consultant' && selectedImage && { image_base64: selectedImage })
             }
 
@@ -82,7 +82,7 @@ function ChatWindow({ activeTab }) {
         } catch (error) {
             setMessages(prev => [...prev, {
                 role: 'assistant',
-                content: 'Connection error. Please check if the backend is running.',
+                content: 'Unable to connect. Please check if the server is running.',
                 error: true
             }])
         }
@@ -100,18 +100,20 @@ function ChatWindow({ activeTab }) {
 
     return (
         <>
-            {/* Messages */}
-            <div className="flex-1 overflow-y-auto px-6 py-4">
+            {/* Messages Area */}
+            <div className="flex-1 overflow-y-auto px-6 py-6">
                 {messages.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center h-full text-center">
-                        <span className="text-6xl mb-4">{activeTab === 'consultant' ? '🌾' : '📋'}</span>
-                        <h3 className="text-xl font-semibold text-notion-text mb-2">
-                            {activeTab === 'consultant' ? 'Ask About Crops' : 'Query Government Schemes'}
+                    <div className="h-full flex flex-col items-center justify-center text-center">
+                        <div className="w-16 h-16 bg-[rgb(227,226,224)] rounded-2xl flex items-center justify-center text-3xl mb-4">
+                            {activeTab === 'consultant' ? '🌾' : '📋'}
+                        </div>
+                        <h3 className="text-lg font-semibold text-notion-default mb-1">
+                            {activeTab === 'consultant' ? 'Crop Consultant' : 'Government Schemes'}
                         </h3>
-                        <p className="text-notion-gray max-w-md">
+                        <p className="text-notion-secondary text-sm max-w-sm">
                             {activeTab === 'consultant'
-                                ? 'Upload crop photos or ask questions about agriculture'
-                                : 'Ask about available government schemes for farmers'}
+                                ? 'Ask questions about crops, diseases, or upload a photo for diagnosis.'
+                                : 'Find government support programs and schemes for farmers.'}
                         </p>
                     </div>
                 ) : (
@@ -119,33 +121,38 @@ function ChatWindow({ activeTab }) {
                         {messages.map((msg, i) => <ChatMessage key={i} message={msg} />)}
                     </div>
                 )}
+
                 {isLoading && (
-                    <div className="flex items-center gap-2 bg-cream-100 rounded-xl p-4 mt-4">
-                        <div className="w-4 h-4 border-2 border-green-500 border-t-transparent rounded-full animate-spin"></div>
-                        <span className="text-notion-gray">Thinking...</span>
+                    <div className="flex items-center gap-3 mt-4 text-notion-secondary">
+                        <div className="spinner-notion"></div>
+                        <span className="text-sm">Thinking...</span>
                     </div>
                 )}
                 <div ref={messagesEndRef} />
             </div>
 
             {/* Input Area */}
-            <div className="border-t border-notion-border bg-white px-6 py-4 shrink-0">
+            <div className="border-t border-[rgba(55,53,47,0.09)] bg-notion-default px-6 py-4">
+                {/* Image preview */}
                 {imagePreview && (
-                    <div className="mb-3 flex items-center gap-3 bg-cream-50 rounded-lg p-3">
-                        <img src={imagePreview} alt="Preview" className="w-16 h-16 object-cover rounded-lg" />
-                        <span className="text-sm text-notion-gray flex-1">Image attached</span>
+                    <div className="mb-3 flex items-center gap-3 bg-notion-hover rounded-lg p-3">
+                        <img src={imagePreview} alt="Preview" className="w-14 h-14 object-cover rounded-lg" />
+                        <div className="flex-1">
+                            <p className="text-sm text-notion-default">Image attached</p>
+                            <p className="text-xs text-notion-tertiary">Ready to analyze</p>
+                        </div>
                         <button
-                            className="text-notion-gray hover:text-red-600 transition"
+                            className="btn-notion btn-notion-default"
                             onClick={removeImage}
                         >
-                            ✕
+                            Remove
                         </button>
                     </div>
                 )}
 
                 {isProcessingImage && (
-                    <div className="mb-3 flex items-center gap-2 text-sm text-notion-gray">
-                        <div className="w-4 h-4 border-2 border-green-500 border-t-transparent rounded-full animate-spin"></div>
+                    <div className="mb-3 flex items-center gap-2 text-sm text-notion-secondary">
+                        <div className="spinner-notion"></div>
                         <span>Processing image...</span>
                     </div>
                 )}
@@ -161,31 +168,36 @@ function ChatWindow({ activeTab }) {
                                 className="hidden"
                             />
                             <button
-                                className="px-4 py-3 rounded-lg bg-cream-100 hover:bg-cream-200 transition disabled:opacity-50"
+                                className="btn-notion btn-notion-default h-10"
                                 onClick={() => imageInputRef.current?.click()}
-                                title="Attach image"
                                 disabled={isProcessingImage}
+                                title="Attach crop photo"
                             >
-                                {isProcessingImage ? '⏳' : '📷'}
+                                📷
                             </button>
                         </>
                     )}
 
-                    <textarea
-                        className="flex-1 px-4 py-3 rounded-lg border border-notion-border focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none"
-                        placeholder={activeTab === 'consultant' ? 'Ask about crops...' : 'Ask about schemes...'}
-                        value={input}
-                        onChange={(e) => setInput(e.target.value)}
-                        onKeyPress={handleKeyPress}
-                        rows={1}
-                    />
+                    <div className="flex-1 relative">
+                        <textarea
+                            className="input-notion resize-none py-2.5 pr-4"
+                            placeholder={activeTab === 'consultant'
+                                ? 'Ask about crops, diseases, treatments...'
+                                : 'Ask about government schemes for farmers...'}
+                            value={input}
+                            onChange={(e) => setInput(e.target.value)}
+                            onKeyPress={handleKeyPress}
+                            rows={1}
+                            style={{ minHeight: '42px' }}
+                        />
+                    </div>
 
                     <button
-                        className="px-6 py-3 rounded-lg bg-green-600 text-white font-medium hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                        className="btn-notion btn-notion-primary h-10 px-5"
                         onClick={sendMessage}
                         disabled={isLoading || isProcessingImage || (!input.trim() && !selectedImage)}
                     >
-                        Send →
+                        Send
                     </button>
                 </div>
             </div>
