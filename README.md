@@ -3,7 +3,7 @@
 **AI-Powered Agricultural Consultant** – Multimodal RAG system for crop disease detection and government scheme information.
 
 ![Version](https://img.shields.io/badge/version-2.0.0-green)
-![License](https://img.shields.io/badge/license-MIT-blue)
+
 
 ---
 
@@ -231,11 +231,6 @@ npm run dev
 | **Auth** | Supabase (email/password) |
 | **Deployment** | Render (backend), Vercel (frontend) |
 
----
-
-## 📜 License
-
-MIT License - See [LICENSE](LICENSE) for details.
 
 ---
 
