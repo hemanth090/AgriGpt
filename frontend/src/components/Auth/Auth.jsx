@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useAuth } from '../../context/AuthContext'
-import './Auth.css'
 
 function Auth() {
     const [isLogin, setIsLogin] = useState(true)
@@ -35,20 +34,24 @@ function Auth() {
     }
 
     return (
-        <div className="auth-container">
-            <div className="auth-card">
-                <div className="auth-header">
-                    <span className="auth-emoji">🌾</span>
-                    <h1>AgriGPT</h1>
-                    <p>{isLogin ? 'Sign in to continue' : 'Create your account'}</p>
+        <div className="min-h-screen flex items-center justify-center bg-cream-50 px-4">
+            <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
+                <div className="text-center mb-8">
+                    <span className="text-5xl block mb-3">🌾</span>
+                    <h1 className="text-3xl font-bold text-notion-text mb-2">AgriGPT</h1>
+                    <p className="text-notion-gray text-sm">
+                        {isLogin ? 'Sign in to continue' : 'Create your account'}
+                    </p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="auth-form">
-                    <div className="form-group">
-                        <label className="form-label">Email</label>
+                <form onSubmit={handleSubmit} className="space-y-5">
+                    <div>
+                        <label className="block text-sm font-medium text-notion-text mb-2">
+                            Email
+                        </label>
                         <input
                             type="email"
-                            className="form-input"
+                            className="w-full px-4 py-3 rounded-lg border border-notion-border focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
                             placeholder="you@example.com"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
@@ -56,11 +59,13 @@ function Auth() {
                         />
                     </div>
 
-                    <div className="form-group">
-                        <label className="form-label">Password</label>
+                    <div>
+                        <label className="block text-sm font-medium text-notion-text mb-2">
+                            Password
+                        </label>
                         <input
                             type="password"
-                            className="form-input"
+                            className="w-full px-4 py-3 rounded-lg border border-notion-border focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
                             placeholder="••••••••"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
@@ -69,17 +74,30 @@ function Auth() {
                         />
                     </div>
 
-                    {error && <div className="auth-error">{error}</div>}
-                    {message && <div className="auth-success">{message}</div>}
+                    {error && (
+                        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+                            {error}
+                        </div>
+                    )}
 
-                    <button type="submit" className="btn btn-primary btn-block" disabled={loading}>
+                    {message && (
+                        <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg text-sm">
+                            {message}
+                        </div>
+                    )}
+
+                    <button
+                        type="submit"
+                        className="w-full bg-gradient-to-r from-green-500 to-green-600 text-white font-semibold py-3 px-4 rounded-lg hover:from-green-600 hover:to-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition shadow-md"
+                        disabled={loading}
+                    >
                         {loading ? 'Loading...' : (isLogin ? 'Sign In' : 'Sign Up')}
                     </button>
                 </form>
 
-                <div className="auth-footer">
+                <div className="mt-6 text-center">
                     <button
-                        className="auth-toggle"
+                        className="text-sm text-notion-gray hover:text-notion-text transition"
                         onClick={() => setIsLogin(!isLogin)}
                     >
                         {isLogin ? "Don't have an account? Sign up" : 'Already have an account? Sign in'}

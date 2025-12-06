@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { API_BASE, fileToBase64, getHeaders } from '../../utils/api'
 import ChatMessage from '../ChatMessage/ChatMessage'
-import './ChatWindow.css'
 
 function ChatWindow({ activeTab }) {
     const [messages, setMessages] = useState([])
@@ -9,7 +8,7 @@ function ChatWindow({ activeTab }) {
     const [selectedImage, setSelectedImage] = useState(null)
     const [imagePreview, setImagePreview] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
-    const [isProcessingImage, setIsProcessingImage] = useState(false)  // Issue 8: Image loading state
+    const [isProcessingImage, setIsProcessingImage] = useState(false)
 
     const messagesEndRef = useRef(null)
     const imageInputRef = useRef(null)
@@ -21,7 +20,7 @@ function ChatWindow({ activeTab }) {
     const handleImageSelect = async (e) => {
         const file = e.target.files[0]
         if (file) {
-            setIsProcessingImage(true)  // Issue 8: Show loading
+            setIsProcessingImage(true)
             try {
                 const base64 = await fileToBase64(file)
                 setSelectedImage(base64)
@@ -29,7 +28,7 @@ function ChatWindow({ activeTab }) {
             } catch (error) {
                 console.error('Error processing image:', error)
             } finally {
-                setIsProcessingImage(false)  // Issue 8: Hide loading
+                setIsProcessingImage(false)
             }
         }
     }
@@ -102,50 +101,56 @@ function ChatWindow({ activeTab }) {
     return (
         <>
             {/* Messages */}
-            <div className="chat-messages">
+            <div className="flex-1 overflow-y-auto px-6 py-4">
                 {messages.length === 0 ? (
-                    <div className="empty-state">
-                        <span className="emoji">{activeTab === 'consultant' ? '🌾' : '📋'}</span>
-                        <h3>{activeTab === 'consultant' ? 'Ask About Crops' : 'Query Government Schemes'}</h3>
-                        <p>
+                    <div className="flex flex-col items-center justify-center h-full text-center">
+                        <span className="text-6xl mb-4">{activeTab === 'consultant' ? '🌾' : '📋'}</span>
+                        <h3 className="text-xl font-semibold text-notion-text mb-2">
+                            {activeTab === 'consultant' ? 'Ask About Crops' : 'Query Government Schemes'}
+                        </h3>
+                        <p className="text-notion-gray max-w-md">
                             {activeTab === 'consultant'
                                 ? 'Upload crop photos or ask questions about agriculture'
                                 : 'Ask about available government schemes for farmers'}
                         </p>
                     </div>
                 ) : (
-                    messages.map((msg, i) => <ChatMessage key={i} message={msg} />)
+                    <div className="space-y-4">
+                        {messages.map((msg, i) => <ChatMessage key={i} message={msg} />)}
+                    </div>
                 )}
                 {isLoading && (
-                    <div className="chat-message assistant">
-                        <div className="flex items-center gap-2">
-                            <span className="spinner"></span>
-                            <span>Thinking...</span>
-                        </div>
+                    <div className="flex items-center gap-2 bg-cream-100 rounded-xl p-4 mt-4">
+                        <div className="w-4 h-4 border-2 border-green-500 border-t-transparent rounded-full animate-spin"></div>
+                        <span className="text-notion-gray">Thinking...</span>
                     </div>
                 )}
                 <div ref={messagesEndRef} />
             </div>
 
             {/* Input Area */}
-            <div className="chat-input-container">
+            <div className="border-t border-notion-border bg-white px-6 py-4 shrink-0">
                 {imagePreview && (
-                    <div className="image-preview">
-                        <img src={imagePreview} alt="Preview" />
-                        <span style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>Image attached</span>
-                        <button className="remove-btn" onClick={removeImage}>✕</button>
+                    <div className="mb-3 flex items-center gap-3 bg-cream-50 rounded-lg p-3">
+                        <img src={imagePreview} alt="Preview" className="w-16 h-16 object-cover rounded-lg" />
+                        <span className="text-sm text-notion-gray flex-1">Image attached</span>
+                        <button
+                            className="text-notion-gray hover:text-red-600 transition"
+                            onClick={removeImage}
+                        >
+                            ✕
+                        </button>
                     </div>
                 )}
 
-                {/* Issue 8: Image processing indicator */}
                 {isProcessingImage && (
-                    <div style={{ padding: '8px 16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <span className="spinner" style={{ width: 16, height: 16 }}></span>
-                        <span style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>Processing image...</span>
+                    <div className="mb-3 flex items-center gap-2 text-sm text-notion-gray">
+                        <div className="w-4 h-4 border-2 border-green-500 border-t-transparent rounded-full animate-spin"></div>
+                        <span>Processing image...</span>
                     </div>
                 )}
 
-                <div className="chat-input-wrapper">
+                <div className="flex items-end gap-2">
                     {activeTab === 'consultant' && (
                         <>
                             <input
@@ -153,10 +158,10 @@ function ChatWindow({ activeTab }) {
                                 accept="image/*"
                                 ref={imageInputRef}
                                 onChange={handleImageSelect}
-                                style={{ display: 'none' }}
+                                className="hidden"
                             />
                             <button
-                                className="btn btn-secondary"
+                                className="px-4 py-3 rounded-lg bg-cream-100 hover:bg-cream-200 transition disabled:opacity-50"
                                 onClick={() => imageInputRef.current?.click()}
                                 title="Attach image"
                                 disabled={isProcessingImage}
@@ -167,7 +172,7 @@ function ChatWindow({ activeTab }) {
                     )}
 
                     <textarea
-                        className="chat-input"
+                        className="flex-1 px-4 py-3 rounded-lg border border-notion-border focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none"
                         placeholder={activeTab === 'consultant' ? 'Ask about crops...' : 'Ask about schemes...'}
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
@@ -176,7 +181,7 @@ function ChatWindow({ activeTab }) {
                     />
 
                     <button
-                        className="btn btn-primary"
+                        className="px-6 py-3 rounded-lg bg-green-600 text-white font-medium hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition"
                         onClick={sendMessage}
                         disabled={isLoading || isProcessingImage || (!input.trim() && !selectedImage)}
                     >

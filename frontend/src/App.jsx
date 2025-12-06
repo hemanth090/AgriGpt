@@ -3,7 +3,6 @@ import { useAuth } from './context/AuthContext'
 import FileUpload from './components/FileUpload/FileUpload'
 import ChatWindow from './components/ChatWindow/ChatWindow'
 import Auth from './components/Auth/Auth'
-import './App.css'
 
 function App() {
   const [activeTab, setActiveTab] = useState('consultant')
@@ -13,8 +12,8 @@ function App() {
   // Show loading while checking auth
   if (loading) {
     return (
-      <div className="app-container" style={{ alignItems: 'center', justifyContent: 'center' }}>
-        <div className="spinner" style={{ width: 40, height: 40 }}></div>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-10 h-10 border-4 border-green-500 border-t-transparent rounded-full animate-spin"></div>
       </div>
     )
   }
@@ -25,30 +24,36 @@ function App() {
   }
 
   return (
-    <div className="app-container">
-      <header className="page-header">
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <span className="emoji">🌾</span>
+    <div className="min-h-screen flex flex-col bg-cream-50">
+      <header className="bg-white border-b border-notion-border px-6 py-4 shrink-0">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <span className="text-4xl">🌾</span>
             <div>
-              <h1 style={{ fontSize: '1.5rem', marginBottom: 0 }}>AgriGPT</h1>
-              <p className="subtitle" style={{ fontSize: '0.875rem' }}>AI-Powered Agricultural Consultant</p>
+              <h1 className="text-2xl font-bold text-notion-text">AgriGPT</h1>
+              <p className="text-sm text-notion-gray">AI-Powered Agricultural Consultant</p>
             </div>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <span style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+          <div className="flex items-center gap-3">
+            <span className="text-sm text-notion-gray">
               {user.email}
-              {isAdmin && <span style={{ marginLeft: '8px', color: 'var(--accent-green)', fontWeight: 600 }}>👑 Admin</span>}
+              {isAdmin && <span className="ml-2 text-green-600 font-semibold">👑 Admin</span>}
             </span>
             {isAdmin && (
               <button
-                className={`btn btn-sm ${showAdmin ? 'btn-primary' : 'btn-secondary'}`}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition ${showAdmin
+                    ? 'bg-green-600 text-white hover:bg-green-700'
+                    : 'bg-cream-100 text-notion-text hover:bg-cream-200'
+                  }`}
                 onClick={() => setShowAdmin(!showAdmin)}
               >
                 {showAdmin ? '💬 Chat' : '⚙️ Admin'}
               </button>
             )}
-            <button className="btn btn-secondary btn-sm" onClick={signOut}>
+            <button
+              className="px-4 py-2 rounded-lg text-sm font-medium bg-cream-100 text-notion-text hover:bg-cream-200 transition"
+              onClick={signOut}
+            >
               Logout
             </button>
           </div>
@@ -57,15 +62,17 @@ function App() {
 
       {showAdmin && isAdmin ? (
         // Admin Panel
-        <div style={{ padding: '24px', flex: 1, overflow: 'auto' }}>
-          <div className="card" style={{ maxWidth: '600px', margin: '0 auto' }}>
-            <div className="card-header">
-              <h2><span className="icon">⚙️</span> Admin Panel</h2>
+        <div className="flex-1 overflow-auto p-6">
+          <div className="max-w-2xl mx-auto bg-white rounded-2xl shadow-lg p-8">
+            <div className="mb-6">
+              <h2 className="text-2xl font-bold text-notion-text flex items-center gap-2">
+                <span>⚙️</span> Admin Panel
+              </h2>
             </div>
-            <div className="card-body">
-              <p style={{ color: 'var(--text-secondary)', marginBottom: '24px' }}>
-                Upload PDFs for the knowledge base. Only admins can access this.
-              </p>
+            <p className="text-notion-gray mb-6">
+              Upload PDFs for the knowledge base. Only admins can access this.
+            </p>
+            <div className="space-y-6">
               <FileUpload
                 endpoint="/crops/upload"
                 icon="📚"
@@ -83,20 +90,25 @@ function App() {
         </div>
       ) : (
         // Main Chat UI
-        <div className="grid-2">
-          {/* Right Column - Chat */}
-          <div className="chat-container" style={{ gridColumn: '1 / -1' }}>
+        <div className="flex-1 overflow-hidden">
+          <div className="h-full flex flex-col">
             {/* Tabs */}
-            <div style={{ padding: '16px 24px 0' }}>
-              <div className="tabs">
+            <div className="px-6 pt-4">
+              <div className="flex gap-2 border-b border-notion-border">
                 <button
-                  className={`tab ${activeTab === 'consultant' ? 'active' : ''}`}
+                  className={`px-4 py-2 font-medium text-sm transition border-b-2 ${activeTab === 'consultant'
+                      ? 'border-green-600 text-green-600'
+                      : 'border-transparent text-notion-gray hover:text-notion-text'
+                    }`}
                   onClick={() => setActiveTab('consultant')}
                 >
                   🌱 Crop Consultant
                 </button>
                 <button
-                  className={`tab ${activeTab === 'schemes' ? 'active' : ''}`}
+                  className={`px-4 py-2 font-medium text-sm transition border-b-2 ${activeTab === 'schemes'
+                      ? 'border-green-600 text-green-600'
+                      : 'border-transparent text-notion-gray hover:text-notion-text'
+                    }`}
                   onClick={() => setActiveTab('schemes')}
                 >
                   🏛️ Government Schemes
